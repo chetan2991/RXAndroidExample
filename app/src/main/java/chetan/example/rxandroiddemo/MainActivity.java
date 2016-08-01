@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     Button mButton;
+    Subscriber<String> mStringSubscriber;
     public static final String TAG = "RXANDROIDSAMPLES";
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,6 +36,19 @@ public class MainActivity extends AppCompatActivity
                 performActionOnButtonClick();
             }
         });
+        mStringSubscriber = new Subscriber<String>() {
+            @Override public void onCompleted() {
+                Log.d(TAG, "onCompleted()");
+            }
+
+            @Override public void onError(Throwable e) {
+                Log.e(TAG, "onError()", e);
+            }
+
+            @Override public void onNext(String string) {
+                Log.d(TAG, "onNext(" + string + ")");
+            }
+        };
     }
 
 
@@ -63,18 +77,17 @@ public class MainActivity extends AppCompatActivity
                 .subscribeOn(Schedulers.newThread())
                 // Be notified on the main thread
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override public void onCompleted() {
-                        Log.d(TAG, "onCompleted()");
-                    }
+                .subscribe(mStringSubscriber);
+    }
 
-                    @Override public void onError(Throwable e) {
-                        Log.e(TAG, "onError()", e);
-                    }
-
-                    @Override public void onNext(String string) {
-                        Log.d(TAG, "onNext(" + string + ")");
-                    }
-                });
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if( mStringSubscriber != null && mStringSubscriber.isUnsubscribed() )
+        {
+            mStringSubscriber.unsubscribe();
+            Log.d(TAG,"Subscriber is Unsubscribe Sucessfully");
+        }
     }
 }
