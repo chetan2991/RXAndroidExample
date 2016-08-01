@@ -15,4 +15,12 @@
     android:layout_height="wrap_content"
     android:id="@+id/clickButton"
     android:text="Click Here"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clickButtonSecond"
+        android:text="Click Here"
+        android:layout_below="@id/clickButton"
+        android:layout_marginTop="10dp"/>
+
 </RelativeLayout>
