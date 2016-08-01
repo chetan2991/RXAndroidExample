@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     Button mButton;
-    Subscriber<String> mStringSubscriber;
+    Subscriber<ArrayList<Track>> mStringSubscriber;
     public static final String TAG = "RXANDROIDSAMPLES";
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity
                 performActionOnButtonClick();
             }
         });
-        mStringSubscriber = new Subscriber<String>()
+        mStringSubscriber = new Subscriber<ArrayList<Track>>()
         {
             @Override public void onCompleted()
             {
@@ -49,19 +50,24 @@ public class MainActivity extends AppCompatActivity
                 Log.e(TAG, "onError()", e);
             }
 
-            @Override public void onNext(String string)
+            @Override public void onNext(ArrayList<Track> trackArrayList)
             {
-                Log.d(TAG, "onNext(" + string + ")");
+                for( int i=0 ;i<trackArrayList.size(); i++ )
+                {
+
+                    Log.d(TAG, "onNext(" + "track=>" +trackArrayList.get( i).getTrackName()+ ")");
+                }
+
             }
         };
     }
 
 
-    static Observable<String> getObservable()
+    static Observable<ArrayList<Track>> getObservable()
     {
-        return Observable.defer(new Func0<Observable<String>>()
+        return Observable.defer(new Func0<Observable<ArrayList<Track>>>()
         {
-            @Override public Observable<String> call()
+            @Override public Observable<ArrayList<Track>> call()
             {
                 try
                 {
@@ -95,8 +101,16 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG,"Subscriber is Unsubscribe Sucessfully");
         }
     }
-    public String provideResult()
+    public  static ArrayList<Track> provideResult()
     {
-        return  "THIS IS RESULT";
+        ArrayList<Track> trackArrayList = new ArrayList<Track>();
+        Track track;
+        for( int i = 0; i<10; i++ )
+        {
+            track = new Track("track"+i);
+            trackArrayList.add(track);
+
+        }
+        return  trackArrayList;
     }
 }
