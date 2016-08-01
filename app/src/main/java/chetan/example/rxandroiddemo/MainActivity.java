@@ -29,23 +29,28 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mButton = ( Button )findViewById( R.id.clickButton );
-        mButton.setOnClickListener(new View.OnClickListener() {
+        mButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view)
             {
                 performActionOnButtonClick();
             }
         });
-        mStringSubscriber = new Subscriber<String>() {
-            @Override public void onCompleted() {
+        mStringSubscriber = new Subscriber<String>()
+        {
+            @Override public void onCompleted()
+            {
                 Log.d(TAG, "onCompleted()");
             }
 
-            @Override public void onError(Throwable e) {
+            @Override public void onError(Throwable e)
+            {
                 Log.e(TAG, "onError()", e);
             }
 
-            @Override public void onNext(String string) {
+            @Override public void onNext(String string)
+            {
                 Log.d(TAG, "onNext(" + string + ")");
             }
         };
@@ -66,7 +71,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     throw OnErrorThrowable.from(e);
                 }
-                return Observable.just("one", "two", "three", "four", "five");
+                return Observable.just( provideResult());
             }
         });
     }
@@ -89,5 +94,9 @@ public class MainActivity extends AppCompatActivity
             mStringSubscriber.unsubscribe();
             Log.d(TAG,"Subscriber is Unsubscribe Sucessfully");
         }
+    }
+    public String provideResult()
+    {
+        return  "THIS IS RESULT";
     }
 }
